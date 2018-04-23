@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/legalweb/healthz/healthz"
+	"github.com/bweston92/healthz/healthz"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sirupsen/logrus"
 )

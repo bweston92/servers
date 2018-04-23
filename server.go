@@ -3,7 +3,7 @@ package servers
 import (
 	"time"
 
-	"github.com/legalweb/healthz/healthz"
+	"github.com/bweston92/healthz/healthz"
 )
 
 type (

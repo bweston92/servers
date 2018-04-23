@@ -1,7 +1,7 @@
 package servers
 
 import (
-	"github.com/legalweb/healthz/healthz"
+	"github.com/bweston92/healthz/healthz"
 )
 
 // WithInternalServerAddr sets the address to bind the internal
