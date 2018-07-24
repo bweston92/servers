@@ -9,6 +9,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var LogInternalRequest bool = false
+
 type (
 	internalRouter struct {
 		hz      *healthz.Healthz
@@ -17,10 +19,12 @@ type (
 )
 
 func (h *internalRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	logrus.
-		WithField("request_uri", r.RequestURI).
-		WithField("request_method", r.Method).
-		Info("internal endpoint hit")
+	if LogInternalRequest {
+		logrus.
+			WithField("request_uri", r.RequestURI).
+			WithField("request_method", r.Method).
+			Info("internal endpoint hit")
+	}
 
 	switch r.URL.Path {
 	case "/healthz":
