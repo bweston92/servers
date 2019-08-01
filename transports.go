@@ -90,17 +90,34 @@ func WithHTTPServer(addr string, server *http.Server) Option {
 }
 
 type (
-	customTransportMananger struct {
-		impl customTransportManangerImpl
+	customMananger struct {
+		impl customManangerImpl
 	}
 
-	customTransportManangerImpl interface {
+	customManangerImpl interface {
 		Run() error
 		Shutdown() error
 	}
+
+	customManagerFuncs struct {
+		Run: func() error
+		Shutdown: func() error
+	}
 )
 
-func (t *customTransportMananger) Start() <-chan error {
+func (f *customManagerFuncs) Run() error {
+	return f.Run()
+}
+
+func (f *customManagerFuncs) Shutdown() error {
+	if f.Shutdown == nil {
+		return nil
+	}
+	
+	return f.Shutdown()
+}
+
+func (t *customMananger) Start() <-chan error {
 	errC := make(chan error)
 
 	go func() {
@@ -110,12 +127,12 @@ func (t *customTransportMananger) Start() <-chan error {
 	return (<-chan error)(errC)
 }
 
-func (t *customTransportMananger) Stop() error {
+func (t *customMananger) Stop() error {
 	return t.impl.Shutdown()
 }
 
-// WithCustom will run a custom transport.
-func WithCustom(addr string, impl customTransportManangerImpl) Option {
+// WithCustom will run a custom.
+func WithCustom(impl customManangerImpl) Option {
 	if impl == nil {
 		panic("must provide a customTransportManangerImpl to WithCustom")
 	}
