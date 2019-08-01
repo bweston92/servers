@@ -88,3 +88,42 @@ func WithHTTPServer(addr string, server *http.Server) Option {
 		return nil
 	}
 }
+
+type (
+	customTransportMananger struct {
+		impl customTransportManangerImpl
+	}
+
+	customTransportManangerImpl interface {
+		Run() error
+		Shutdown() error
+	}
+)
+
+func (t *customTransportMananger) Start() <-chan error {
+	errC := make(chan error)
+
+	go func() {
+		errC <- t.impl.Run()
+	}()
+
+	return (<-chan error)(errC)
+}
+
+func (t *customTransportMananger) Stop() error {
+	return t.impl.Shutdown()
+}
+
+// WithCustom will run a custom transport.
+func WithCustom(addr string, impl customTransportManangerImpl) Option {
+	if impl == nil {
+		panic("must provide a customTransportManangerImpl to WithCustom")
+	}
+
+	return func(o *serverOptions) error {
+		o.transports = append(o.transports, &customTransportMananger{
+			impl: impl,
+		})
+		return nil
+	}
+}
