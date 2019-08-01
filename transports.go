@@ -99,21 +99,21 @@ type (
 		Shutdown() error
 	}
 
-	customManagerFuncs struct {
+	CustomManagerFuncs struct {
 		Run: func() error
 		Shutdown: func() error
 	}
 )
 
-func (f *customManagerFuncs) Run() error {
+func (f *CustomManagerFuncs) Run() error {
 	return f.Run()
 }
 
-func (f *customManagerFuncs) Shutdown() error {
+func (f *CustomManagerFuncs) Shutdown() error {
 	if f.Shutdown == nil {
 		return nil
 	}
-	
+
 	return f.Shutdown()
 }
 
