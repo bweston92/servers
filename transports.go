@@ -100,8 +100,8 @@ type (
 	}
 
 	CustomManagerFuncs struct {
-		Run: func() error
-		Shutdown: func() error
+		Run      func() error
+		Shutdown func() error
 	}
 )
 
