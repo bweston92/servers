@@ -100,21 +100,21 @@ type (
 	}
 
 	CustomManagerFuncs struct {
-		Run      func() error
-		Shutdown func() error
+		RunFunc      func() error
+		ShutdownFunc func() error
 	}
 )
 
 func (f *CustomManagerFuncs) Run() error {
-	return f.Run()
+	return f.RunFunc()
 }
 
 func (f *CustomManagerFuncs) Shutdown() error {
-	if f.Shutdown == nil {
+	if f.ShutdownFunc == nil {
 		return nil
 	}
 
-	return f.Shutdown()
+	return f.ShutdownFunc()
 }
 
 func (t *customMananger) Start() <-chan error {
@@ -138,7 +138,7 @@ func WithCustom(impl customManangerImpl) Option {
 	}
 
 	return func(o *serverOptions) error {
-		o.transports = append(o.transports, &customTransportMananger{
+		o.transports = append(o.transports, &customMananger{
 			impl: impl,
 		})
 		return nil
